@@ -33,3 +33,7 @@ This app has the following features
 
 ### Add Appointment
 ![Add Appointment](addAppointment.png)
+![Add Appointment](addAppointment2.jpg)
+
+### APK
+[app-debug.apk](app%2Fbuild%2Foutputs%2Fapk%2Fdebug%2Fapp-debug.apk)

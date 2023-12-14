@@ -30,9 +30,9 @@ public class AppointmentActivity extends AppCompatActivity{
         etAppointmentTime = findViewById(R.id.etAppointmentTime);
         btnSaveAppointment = findViewById(R.id.btnSaveAppointment);
 
-        etAppointmentDate.setOnClickListener(view -> showDatePickerDialog(this, etAppointmentDate));
+        etAppointmentDate.setOnClickListener(view -> showDatePickerDialog(AppointmentActivity.this, etAppointmentDate));
 
-        etAppointmentTime.setOnClickListener(view -> showTimePickerDialog(this, etAppointmentTime));
+        etAppointmentTime.setOnClickListener(view -> showTimePickerDialog(AppointmentActivity.this, etAppointmentTime));
 
         patientId = getIntent().getStringExtra("patient_id");
 

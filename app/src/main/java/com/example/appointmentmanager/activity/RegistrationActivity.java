@@ -62,13 +62,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         appointmentViewModel = new ViewModelProvider(this).get(AppViewModel.class);
 
-//        etBirthDate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showDatePickerDialog();
-//            }
-//        });
-        etBirthDate.setOnClickListener(view -> showDatePickerDialog(this, etBirthDate));
+        etBirthDate.setOnClickListener(view -> showDatePickerDialog(RegistrationActivity.this, etBirthDate));
 
         AtomicBoolean isDisability = new AtomicBoolean(false);
         rbDisability.setOnCheckedChangeListener((group, checked)->{
@@ -131,29 +125,4 @@ public class RegistrationActivity extends AppCompatActivity {
             Toast.makeText(this, "Please fill All fields marked *", Toast.LENGTH_SHORT).show();
         }
     }
-
-//    public void showDatePickerDialog() {
-//        // Get the current date
-//        Calendar calendar = Calendar.getInstance();
-//        int year = calendar.get(Calendar.YEAR);
-//        int month = calendar.get(Calendar.MONTH);
-//        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-//
-//        // Create a date picker dialog and set the listener for date selection
-//        DatePickerDialog datePickerDialog = new DatePickerDialog(
-//                this,
-//                new DatePickerDialog.OnDateSetListener() {
-//                    @Override
-//                    public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
-//                        // Display the selected date in the EditText
-//                        String selectedDate = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDay;
-//                        etBirthDate.setText(selectedDate);
-//                    }
-//                },
-//                year, month, dayOfMonth);
-//
-//        // Show the date picker dialog
-//        datePickerDialog.show();
-//    }
-
 }

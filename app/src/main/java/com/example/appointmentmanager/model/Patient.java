@@ -20,6 +20,22 @@ public class Patient {
     public Patient() {
     }
 
+    public Patient(String firstName, String surname, String otherName, String patientNumber, String birthDate, String idNumber, String mobileNumber, String email, String altContactPerson, String atlContactPersonPhone, Boolean disability, String county) {
+        this.id = id;
+        this.firstName = firstName;
+        this.surname = surname;
+        this.otherName = otherName;
+        this.patientNumber = patientNumber;
+        this.birthDate = birthDate;
+        this.idNumber = idNumber;
+        this.mobileNumber = mobileNumber;
+        this.email = email;
+        this.altContactPerson = altContactPerson;
+        this.atlContactPersonPhone = atlContactPersonPhone;
+        this.disability = disability;
+        this.county = county;
+    }
+
     public String getFirstName() {
         return firstName;
     }

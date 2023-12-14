@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.appointmentmanager.data.ApiEndpoints;
+import com.example.appointmentmanager.model.Appointment;
 import com.example.appointmentmanager.model.Patient;
 import com.example.appointmentmanager.utils.Result;
 
@@ -24,7 +25,12 @@ public class PatientRepository {
         return patientResultLiveData;
     }
 
-    public void addPatient(Patient patient) {
+    public void addPatient(String firstName, String surname, String otherName, String patientNumber,
+                           String birthDate, String idNumber, String mobileNumber, String email,
+                           String altContactPerson, String atlContactPersonPhone, Boolean disability, String county) {
+        Patient patient = new Patient(firstName, surname, otherName,patientNumber,
+                birthDate,idNumber,mobileNumber,email,
+                altContactPerson,atlContactPersonPhone,disability,county);
         Call<Patient> call = apiEndpoints.postPatient(patient);
         if (call != null) {
             call.enqueue(new Callback<Patient>() {

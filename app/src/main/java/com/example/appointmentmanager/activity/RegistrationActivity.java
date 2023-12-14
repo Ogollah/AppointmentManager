@@ -1,5 +1,7 @@
 package com.example.appointmentmanager.activity;
 
+import static com.example.appointmentmanager.utils.DateUtils.showDatePickerDialog;
+
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.appointmentmanager.R;
 import com.example.appointmentmanager.data.ApiClient;
@@ -32,6 +35,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
     private PatientRepository patientRepository;
+
+    private AppViewModel appointmentViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +60,15 @@ public class RegistrationActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressBar);
 
-        etBirthDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog();
-            }
-        });
+        appointmentViewModel = new ViewModelProvider(this).get(AppViewModel.class);
+
+//        etBirthDate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showDatePickerDialog();
+//            }
+//        });
+        etBirthDate.setOnClickListener(view -> showDatePickerDialog(this, etBirthDate));
 
         AtomicBoolean isDisability = new AtomicBoolean(false);
         rbDisability.setOnCheckedChangeListener((group, checked)->{
@@ -97,42 +105,26 @@ public class RegistrationActivity extends AppCompatActivity {
             // Show loading indicator
             progressBar.setVisibility(View.VISIBLE);
 
-            // Create a Patient object
-            Patient patient = new Patient();
-            patient.setFirstName(firstName);
-            patient.setSurname(surname);
-            patient.setBirthDate(birthDate);
-            patient.setIdNumber(nationId);
-            patient.setCounty(county);
-            patient.setPatientNumber(patientNumber);
-            patient.setDisability(isDisability);
-            patient.setMobileNumber(mobile);
-            patient.setEmail(email);
-            patient.setAltContactPerson(altContactPerson);
-            patient.setAtlContactPersonPhone(atlContactPersonPhone);
-
-            // Call the repository to add the patient
-            patientRepository.addPatient(patient);
+            appointmentViewModel.savePatients(firstName, surname, surname,patientNumber,
+                    birthDate,nationId,mobile,email,
+                    altContactPerson,atlContactPersonPhone,isDisability,county);
 
             // Observe the result
             patientRepository.getPatientResultLiveData().observe(this, result -> {
                 progressBar.setVisibility(View.GONE);
-                Intent intent = new Intent(this, AppointmentActivity.class);
+                if (result instanceof Result.SuccessWithId) {
+                    // Patient registration success
+                    Result.SuccessWithId<Patient> successResult = (Result.SuccessWithId<Patient>) result;
+                    long createdPatientId = successResult.getId();
+                    Toast.makeText(this, "Patient registered successfully", Toast.LENGTH_SHORT).show();
 
-                startActivity(intent);
-//                if (result instanceof Result.SuccessWithId) {
-//                    // Patient registration success
-//                    Result.SuccessWithId<Patient> successResult = (Result.SuccessWithId<Patient>) result;
-//                    long createdPatientId = successResult.getId();
-//                    Toast.makeText(this, "Patient registered successfully", Toast.LENGTH_SHORT).show();
-//
-//                    Intent intent = new Intent(this, AppointmentActivity.class);
-//                    intent.putExtra("patient_id", createdPatientId);
-//                    startActivity(intent);
-//                } else if (result instanceof Result.Error) {
-//                    // Patient registration failure
-//                    Toast.makeText(this, "Patient registration failed", Toast.LENGTH_SHORT).show();
-//                }
+                    Intent intent = new Intent(this, AppointmentActivity.class);
+                    intent.putExtra("patient_id", createdPatientId);
+                    startActivity(intent);
+                } else if (result instanceof Result.Error) {
+                    // Patient registration failure
+                    Toast.makeText(this, "Patient registration failed", Toast.LENGTH_SHORT).show();
+                }
             });
 
         } else {
@@ -140,30 +132,28 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
-    public void showDatePickerDialog() {
-        // Get the current date
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+//    public void showDatePickerDialog() {
+//        // Get the current date
+//        Calendar calendar = Calendar.getInstance();
+//        int year = calendar.get(Calendar.YEAR);
+//        int month = calendar.get(Calendar.MONTH);
+//        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+//
+//        // Create a date picker dialog and set the listener for date selection
+//        DatePickerDialog datePickerDialog = new DatePickerDialog(
+//                this,
+//                new DatePickerDialog.OnDateSetListener() {
+//                    @Override
+//                    public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
+//                        // Display the selected date in the EditText
+//                        String selectedDate = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDay;
+//                        etBirthDate.setText(selectedDate);
+//                    }
+//                },
+//                year, month, dayOfMonth);
+//
+//        // Show the date picker dialog
+//        datePickerDialog.show();
+//    }
 
-        // Create a date picker dialog and set the listener for date selection
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
-                        // Display the selected date in the EditText
-                        String selectedDate = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDay;
-                        etBirthDate.setText(selectedDate);
-                    }
-                },
-                year, month, dayOfMonth);
-
-        // Show the date picker dialog
-        datePickerDialog.show();
-    }
-
-    public void showDatePickerDialog(View view) {
-    }
 }

@@ -3,10 +3,8 @@ package com.example.appointmentmanager.activity;
 import static com.example.appointmentmanager.utils.DateUtils.showDatePickerDialog;
 import static com.example.appointmentmanager.utils.DateUtils.showTimePickerDialog;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,7 +18,7 @@ import com.example.appointmentmanager.utils.Result;
 public class AppointmentActivity extends AppCompatActivity{
     private EditText etAppointmentDate, etAppointmentTime;
     private Button btnSaveAppointment;
-    private AppointmentViewModel appointmentViewModel;
+    private AppViewModel appointmentViewModel;
     private String patientId; // Assume patientId is set when starting the activity
 
     @Override
@@ -32,13 +30,13 @@ public class AppointmentActivity extends AppCompatActivity{
         etAppointmentTime = findViewById(R.id.etAppointmentTime);
         btnSaveAppointment = findViewById(R.id.btnSaveAppointment);
 
-        etAppointmentDate.setOnClickListener(v -> showDatePickerDialog(this, etAppointmentDate));
+        etAppointmentDate.setOnClickListener(view -> showDatePickerDialog(this, etAppointmentDate));
 
-        etAppointmentTime.setOnClickListener(v -> showTimePickerDialog(this, etAppointmentTime));
+        etAppointmentTime.setOnClickListener(view -> showTimePickerDialog(this, etAppointmentTime));
 
         patientId = getIntent().getStringExtra("patient_id");
 
-        appointmentViewModel = new ViewModelProvider(this).get(AppointmentViewModel.class);
+        appointmentViewModel = new ViewModelProvider(this).get(AppViewModel.class);
 
         btnSaveAppointment.setOnClickListener(view -> saveAppointment(Long.parseLong(patientId)));
 

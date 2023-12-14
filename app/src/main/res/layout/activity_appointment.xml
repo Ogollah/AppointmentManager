@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- Form Title -->
+                <TextView
+                    android:id="@+id/tvFormTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Visit"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Visit Date -->
+                <EditText
+                    android:id="@+id/etAppointmentDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvFormTitle"
+                    android:layout_marginTop="16dp"
+                    android:hint="Visit Date"
+                    android:inputType="date" />
+
+                <!-- Visit Date -->
+                <EditText
+                    android:id="@+id/etAppointmentTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/etAppointmentDate"
+                    android:layout_marginTop="16dp"
+                    android:hint="Appointment Time"
+                    android:inputType="date" />
+
+
+                <Button
+                    android:id="@+id/btnSaveAppointment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/etAppointmentTime"
+                    android:layout_marginTop="16dp"
+                    android:text="Save Appointment" />
+
+            </RelativeLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

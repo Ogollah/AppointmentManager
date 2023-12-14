@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Navigation Bar -->
+    <LinearLayout
+        android:id="@+id/navigationBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/design_default_color_primary_variant"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/backArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:contentDescription="@string/back"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:onClick="onBackPressed"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/add_client"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textAlignment="center"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/etPatientNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Unique ID *"
+        android:textColor="@android:color/holo_red_dark"
+        android:textStyle="bold"
+        android:layout_below="@+id/navigationBar"
+        android:layout_margin="@dimen/reg_margin"/>
+
+    <EditText
+        android:id="@+id/etNationalId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="National ID Number"
+        android:textStyle="bold"
+        android:layout_below="@+id/etPatientNumber"
+        android:layout_margin="@dimen/reg_margin"/>
+
+    <EditText
+        android:id="@+id/etSurName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Surname*"
+        android:textColor="@android:color/holo_red_dark"
+        android:layout_below="@+id/etNationalId"
+        android:layout_margin="@dimen/reg_margin"
+        android:textStyle="bold"/>
+    <EditText
+        android:id="@+id/etFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="First Name*"
+        android:textColor="@android:color/holo_red_dark"
+        android:layout_below="@+id/etSurName"
+        android:layout_margin="@dimen/reg_margin"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/etOtherName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Other Name*"
+        android:textColor="@android:color/holo_red_dark"
+        android:layout_below="@+id/etFirstName"
+        android:layout_margin="@dimen/reg_margin"
+        android:textStyle="bold"/>
+
+    <RadioGroup
+        android:id="@+id/rbSex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etOtherName"
+        android:layout_margin="@dimen/reg_margin">
+
+        <TextView
+            android:id="@+id/tvSex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Sex*"
+            android:textColor="@android:color/holo_red_dark"
+            android:textStyle="bold"/>
+
+        <RadioButton
+            android:id="@+id/rbMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"/>
+
+        <RadioButton
+            android:id="@+id/rbFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"/>
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/etBirthDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Birth Date *"
+        android:textColor="@android:color/holo_red_dark"
+        android:textStyle="bold"
+        android:layout_below="@+id/rbSex"
+        android:layout_margin="@dimen/reg_margin"
+        android:focusable="false"
+        android:onClick="showDatePickerDialog"/>
+
+    <EditText
+        android:id="@+id/etCounty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Home County*"
+        android:textColor="@android:color/holo_red_dark"
+        android:layout_below="@+id/etBirthDate"
+        android:layout_margin="@dimen/reg_margin"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/etMobile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Mobile Number*"
+        android:textColor="@android:color/holo_red_dark"
+        android:inputType="number"
+        android:layout_below="@+id/etCounty"
+        android:layout_margin="@dimen/reg_margin"
+        android:textStyle="bold"/>
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:textColor="@android:color/holo_red_dark"
+        android:inputType="textEmailAddress"
+        android:layout_below="@+id/etMobile"
+        android:layout_margin="@dimen/reg_margin"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/etAltPerson"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name of alternative Contact person"
+        android:textColor="@android:color/holo_red_dark"
+        android:layout_below="@+id/etEmail"
+        android:layout_margin="@dimen/reg_margin"
+        android:textStyle="bold"/>
+    <EditText
+        android:id="@+id/etAltPersonPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name of alternative Contact person"
+        android:inputType="number"
+        android:textColor="@android:color/holo_red_dark"
+        android:layout_below="@+id/etAltPerson"
+        android:layout_margin="@dimen/reg_margin"
+        android:textStyle="bold"/>
+    <RadioGroup
+        android:id="@+id/rbDisability"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etAltPersonPhone"
+        android:layout_margin="@dimen/reg_margin">
+
+        <TextView
+            android:id="@+id/tvDisability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Has disability?*"
+            android:textColor="@android:color/holo_red_dark"
+            android:textStyle="bold"/>
+
+        <RadioButton
+            android:id="@+id/rbYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"/>
+
+        <RadioButton
+            android:id="@+id/rbNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"/>
+    </RadioGroup>
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rbDisability"
+        android:layout_marginTop="16dp"
+        android:text="Save" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+</RelativeLayout>

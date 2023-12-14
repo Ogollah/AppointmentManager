@@ -19,7 +19,7 @@ public class AppointmentViewModel extends ViewModel {
         return appointmentRepository.getAppointmentResultLiveData();
     }
 
-    public void saveAppointments(String appointmentDate, String appointmentTime) {
-        appointmentRepository.saveAppointments(appointmentDate, appointmentTime);
+    public void saveAppointments(String appointmentDate, String appointmentTime, Long patientId) {
+        appointmentRepository.saveAppointments(appointmentDate, appointmentTime, patientId);
     }
 }

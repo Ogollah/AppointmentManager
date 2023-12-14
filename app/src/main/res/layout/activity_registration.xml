@@ -173,7 +173,7 @@
         android:id="@+id/etAltPersonPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name of alternative Contact person"
+        android:hint="Alternative Contact person Phone"
         android:inputType="number"
         android:textColor="@android:color/holo_red_dark"
         android:layout_below="@+id/etAltPerson"

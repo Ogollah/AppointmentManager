@@ -49,14 +49,6 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
-        ImageView backArrow = findViewById(R.id.backArrow);
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
         ApiEndpoints apiEndpoints = ApiClient.getClient().create(ApiEndpoints.class);
         patientRepository = new PatientRepository(apiEndpoints);
 
@@ -94,12 +86,14 @@ public class RegistrationActivity extends AppCompatActivity {
             // Observe the result
             patientRepository.getPatientResultLiveData().observe(this, result -> {
                 progressBar.setVisibility(View.GONE);
-                if (result instanceof Result.Success) {
+                if (result instanceof Result.SuccessWithId) {
                     // Patient registration success
+                    Result.SuccessWithId<Patient> successResult = (Result.SuccessWithId<Patient>) result;
+                    long createdPatientId = successResult.getId();
                     Toast.makeText(this, "Patient registered successfully", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(this, AppointmentActivity.class);
-                    intent.putExtra("patient_no", patient.getPatientNumber());
+                    intent.putExtra("patient_id", createdPatientId);
                     startActivity(intent);
                 } else if (result instanceof Result.Error) {
                     // Patient registration failure

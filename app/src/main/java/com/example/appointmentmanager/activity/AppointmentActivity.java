@@ -17,7 +17,7 @@ public class AppointmentActivity extends AppCompatActivity{
     private Button btnSaveAppointment;
     private AppointmentViewModel appointmentViewModel;
 
-    private String patientNo; // Assume patientId is set when starting the activity
+    private String patientId; // Assume patientId is set when starting the activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,17 +28,17 @@ public class AppointmentActivity extends AppCompatActivity{
         etAppointmentDate = findViewById(R.id.etAppointmentDate);
         btnSaveAppointment = findViewById(R.id.btnSaveAppointment);
 
-        patientNo = getIntent().getStringExtra("patient_no");
+        patientId = getIntent().getStringExtra("patient_id");
 
         appointmentViewModel = new ViewModelProvider(this).get(AppointmentViewModel.class);
 
-        btnSaveAppointment.setOnClickListener(view -> saveVisit());
+        btnSaveAppointment.setOnClickListener(view -> saveAppointment(Long.parseLong(patientId)));
 
         // Observe the result of the visit operation
         appointmentViewModel.getAppointmentResultLiveData().observe(this, result -> {
             if (result instanceof Result.Success) {
                 // Visit saved successfully
-                Toast.makeText(this, "Visit saved successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Appointment saved successfully", Toast.LENGTH_SHORT).show();
                 finish(); // Close the activity
             } else if (result instanceof Result.Error) {
                 // Error saving visit
@@ -48,12 +48,12 @@ public class AppointmentActivity extends AppCompatActivity{
         });
     }
 
-    private void saveVisit() {
+    private void saveAppointment(Long PatientId) {
         String appointmentDate = etAppointmentDate.getText().toString();
         String appointmentTime = etAppointmentTime.getText().toString();
 
              if (!appointmentDate.isEmpty() && !appointmentTime.isEmpty()) {
-            appointmentViewModel.saveAppointments(appointmentDate, appointmentTime);
+            appointmentViewModel.saveAppointments(appointmentDate, appointmentTime, PatientId);
         } else {
             Toast.makeText(this, "Please enter Appointment date", Toast.LENGTH_SHORT).show();
         }

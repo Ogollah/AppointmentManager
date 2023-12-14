@@ -6,11 +6,12 @@ import com.example.appointmentmanager.model.Patient;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface ApiEndpoints {
 
     @POST("patient")
-    Call<Void> postPatient(@Body Patient patient);
-    @POST("api/v1/appointment")
-    Call<Void> saveAppointments(@Body Appointment appointment);
+    Call<Patient> postPatient(@Body Patient patient);
+    @POST("appointment/{id}")
+    Call<Void> saveAppointments(@Body Appointment appointment, @Path("id") Long id);
 }

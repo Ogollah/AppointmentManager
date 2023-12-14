@@ -3,6 +3,7 @@ package com.example.appointmentmanager.model;
 import java.util.Date;
 
 public class Patient {
+    private Long id;
     private String firstName;
     private String surname;
     private String otherName;
@@ -16,6 +17,21 @@ public class Patient {
     private String county;
 
     public Patient() {
+    }
+
+    public Patient(Long id, String firstName, String surname, String otherName, String patientNumber, String birthDate, String idNumber, String mobileNumber, String email, String altContactPerson, String disability, String county) {
+        this.id = id;
+        this.firstName = firstName;
+        this.surname = surname;
+        this.otherName = otherName;
+        this.patientNumber = patientNumber;
+        this.birthDate = birthDate;
+        this.idNumber = idNumber;
+        this.mobileNumber = mobileNumber;
+        this.email = email;
+        this.altContactPerson = altContactPerson;
+        this.disability = disability;
+        this.county = county;
     }
 
     public String getFirstName() {
@@ -105,5 +121,13 @@ public class Patient {
 
     public void setCounty(String county) {
         this.county = county;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

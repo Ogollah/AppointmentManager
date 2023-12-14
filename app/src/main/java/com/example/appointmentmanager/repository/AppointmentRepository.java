@@ -22,9 +22,9 @@ public class AppointmentRepository {
         return appointmentResultLiveData;
     }
 
-    public void saveAppointments(String appointmentDate, String appointmentTime) {
+    public void saveAppointments(String appointmentDate, String appointmentTime, Long patientId) {
         Appointment appointment = new Appointment(appointmentDate, appointmentTime);
-        Call<Void> call = apiEndpoints.saveAppointments(appointment);
+        Call<Void> call = apiEndpoints.saveAppointments(appointment, patientId);
 
         call.enqueue(new Callback<Void>() {
             @Override

@@ -14,25 +14,25 @@ import retrofit2.Response;
 public class PatientRepository {
 
     private ApiEndpoints apiEndpoints;
-    private MutableLiveData<Result<Void>> patientResultLiveData = new MutableLiveData<>();
+    private MutableLiveData<Result<Patient>> patientResultLiveData = new MutableLiveData<>();
 
     public PatientRepository(ApiEndpoints apiEndpoints) {
         this.apiEndpoints = apiEndpoints;
     }
 
-    public LiveData<Result<Void>> getPatientResultLiveData() {
+    public LiveData<Result<Patient>> getPatientResultLiveData() {
         return patientResultLiveData;
     }
 
     public void addPatient(Patient patient) {
-        Call<Void> call = apiEndpoints.postPatient(patient);
+        Call<Patient> call = apiEndpoints.postPatient(patient);
         if (call != null) {
-            call.enqueue(new Callback<Void>() {
+            call.enqueue(new Callback<Patient>() {
                 @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
+                public void onResponse(Call<Patient> call, Response<Patient> response) {
                     if (response.isSuccessful()) {
                         // Notify observers of successful patient registration
-                        patientResultLiveData.setValue(new Result.Success<>(null));
+                        patientResultLiveData.setValue(new Result.Success<>(response.body()));
                     } else {
                         // Notify observers of patient registration failure
                         patientResultLiveData.setValue(new Result.Error<>(new Exception("Patient registration failed")));
@@ -40,7 +40,7 @@ public class PatientRepository {
                 }
 
                 @Override
-                public void onFailure(Call<Void> call, Throwable t) {
+                public void onFailure(Call<Patient> call, Throwable t) {
                     // Notify observers of network error
                     patientResultLiveData.setValue(new Result.Error<>(new Exception(t)));
                 }

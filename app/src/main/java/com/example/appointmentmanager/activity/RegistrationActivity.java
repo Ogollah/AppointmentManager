@@ -98,9 +98,9 @@ public class RegistrationActivity extends AppCompatActivity {
                     // Patient registration success
                     Toast.makeText(this, "Patient registered successfully", Toast.LENGTH_SHORT).show();
 
-//                    Intent intent = new Intent(this, PatientDetailsActivity.class);
-//                    intent.putExtra("patient_no", patient.getPatientNumber());
-//                    startActivity(intent);
+                    Intent intent = new Intent(this, AppointmentActivity.class);
+                    intent.putExtra("patient_no", patient.getPatientNumber());
+                    startActivity(intent);
                 } else if (result instanceof Result.Error) {
                     // Patient registration failure
                     Toast.makeText(this, "Patient registration failed", Toast.LENGTH_SHORT).show();

@@ -45,7 +45,7 @@
         android:id="@+id/etPatientNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Unique ID *"
+        android:hint="Patient Number *"
         android:textColor="@android:color/holo_red_dark"
         android:textStyle="bold"
         android:layout_below="@+id/navigationBar"

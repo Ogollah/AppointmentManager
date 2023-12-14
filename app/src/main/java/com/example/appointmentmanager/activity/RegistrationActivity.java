@@ -7,8 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,9 +22,13 @@ import com.example.appointmentmanager.repository.PatientRepository;
 import com.example.appointmentmanager.utils.Result;
 
 import java.util.Calendar;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RegistrationActivity extends AppCompatActivity {
-    private EditText etNationId, etSurname, etFirstName, etCounty, etBirthDate, etPatientNo;
+    private EditText etNationId, etSurname, etFirstName, etCounty, etBirthDate, etPatientNo,
+            etMobile, etEmail, etAltContactPerson,etAlContactPersonPhone;
+    private RadioGroup rbDisability;
+    private RadioButton rbYes, rbNo;
 
     private ProgressBar progressBar;
     private PatientRepository patientRepository;
@@ -39,6 +44,14 @@ public class RegistrationActivity extends AppCompatActivity {
         etSurname = findViewById(R.id.etSurName);
         etCounty = findViewById(R.id.etCounty);
         etPatientNo = findViewById(R.id.etPatientNumber);
+        etMobile = findViewById(R.id.etMobile);
+        etEmail = findViewById(R.id.etEmail);
+        etAltContactPerson = findViewById(R.id.etAltPerson);
+        etAlContactPersonPhone = findViewById(R.id.etAltPersonPhone);
+
+        rbDisability = findViewById(R.id.rbDisability);
+        rbYes = findViewById(R.id.rbYes);
+        rbNo = findViewById(R.id.rbNo);
 
         progressBar = findViewById(R.id.progressBar);
 
@@ -49,24 +62,37 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
+        AtomicBoolean isDisability = new AtomicBoolean(false);
+        rbDisability.setOnCheckedChangeListener((group, checked)->{
+            if (checked == rbYes.getId())
+            {
+                isDisability.set(true);
+            } else if (checked == rbNo.getId()) {
+                isDisability.set(false);
+            }
+        });
+
         ApiEndpoints apiEndpoints = ApiClient.getClient().create(ApiEndpoints.class);
         patientRepository = new PatientRepository(apiEndpoints);
 
         Button btnSave = findViewById(R.id.btnSave);
-        btnSave.setOnClickListener(view -> savePatient());
+        btnSave.setOnClickListener(view -> savePatient(isDisability.get()));
     }
-
-
-    private void savePatient() {
+    private void savePatient(boolean isDisability) {
         String nationId = etNationId.getText().toString();
         String firstName = etFirstName.getText().toString();
         String birthDate = etBirthDate.getText().toString();
         String surname = etSurname.getText().toString();
         String county = etCounty.getText().toString();
         String patientNumber = etPatientNo.getText().toString();
+        String  mobile = etMobile.getText().toString();
+        String email = etEmail.getText().toString();
+        String altContactPerson = etAltContactPerson.getText().toString();
+        String atlContactPersonPhone = etAlContactPersonPhone.getText().toString();
 
 
-        if (!surname.isEmpty() && !firstName.isEmpty() && !birthDate.isEmpty()) {
+        if (!surname.isEmpty() && !firstName.isEmpty() && !birthDate.isEmpty() && !county.isEmpty()
+                && !mobile.isEmpty() && !patientNumber.isEmpty()) {
 
             // Show loading indicator
             progressBar.setVisibility(View.VISIBLE);
@@ -79,6 +105,11 @@ public class RegistrationActivity extends AppCompatActivity {
             patient.setIdNumber(nationId);
             patient.setCounty(county);
             patient.setPatientNumber(patientNumber);
+            patient.setDisability(isDisability);
+            patient.setMobileNumber(mobile);
+            patient.setEmail(email);
+            patient.setAltContactPerson(altContactPerson);
+            patient.setAtlContactPersonPhone(atlContactPersonPhone);
 
             // Call the repository to add the patient
             patientRepository.addPatient(patient);
@@ -86,19 +117,22 @@ public class RegistrationActivity extends AppCompatActivity {
             // Observe the result
             patientRepository.getPatientResultLiveData().observe(this, result -> {
                 progressBar.setVisibility(View.GONE);
-                if (result instanceof Result.SuccessWithId) {
-                    // Patient registration success
-                    Result.SuccessWithId<Patient> successResult = (Result.SuccessWithId<Patient>) result;
-                    long createdPatientId = successResult.getId();
-                    Toast.makeText(this, "Patient registered successfully", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, AppointmentActivity.class);
 
-                    Intent intent = new Intent(this, AppointmentActivity.class);
-                    intent.putExtra("patient_id", createdPatientId);
-                    startActivity(intent);
-                } else if (result instanceof Result.Error) {
-                    // Patient registration failure
-                    Toast.makeText(this, "Patient registration failed", Toast.LENGTH_SHORT).show();
-                }
+                startActivity(intent);
+//                if (result instanceof Result.SuccessWithId) {
+//                    // Patient registration success
+//                    Result.SuccessWithId<Patient> successResult = (Result.SuccessWithId<Patient>) result;
+//                    long createdPatientId = successResult.getId();
+//                    Toast.makeText(this, "Patient registered successfully", Toast.LENGTH_SHORT).show();
+//
+//                    Intent intent = new Intent(this, AppointmentActivity.class);
+//                    intent.putExtra("patient_id", createdPatientId);
+//                    startActivity(intent);
+//                } else if (result instanceof Result.Error) {
+//                    // Patient registration failure
+//                    Toast.makeText(this, "Patient registration failed", Toast.LENGTH_SHORT).show();
+//                }
             });
 
         } else {
@@ -128,5 +162,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
         // Show the date picker dialog
         datePickerDialog.show();
+    }
+
+    public void showDatePickerDialog(View view) {
     }
 }

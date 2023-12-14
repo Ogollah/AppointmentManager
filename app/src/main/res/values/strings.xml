@@ -45,4 +45,5 @@
     </string>
     <string name="back">Back</string>
     <string name="add_client">Add New Patient</string>
+    <string name="add_appointment">Add Appointment</string>
 </resources>

@@ -13,12 +13,6 @@ public abstract class Result<T>  {
         }
     }
 
-    public static class SuccessVoid extends Result<Void> {
-        public SuccessVoid() {
-            // No data for Void
-        }
-    }
-
     public static class SuccessWithId<T> extends Success<T> {
         private long id;
 

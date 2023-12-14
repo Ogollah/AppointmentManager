@@ -13,25 +13,11 @@ public class Patient {
     private String mobileNumber;
     private String email;
     private String altContactPerson;
-    private String disability;
+    private String atlContactPersonPhone;
+    private Boolean disability;
     private String county;
 
     public Patient() {
-    }
-
-    public Patient(Long id, String firstName, String surname, String otherName, String patientNumber, String birthDate, String idNumber, String mobileNumber, String email, String altContactPerson, String disability, String county) {
-        this.id = id;
-        this.firstName = firstName;
-        this.surname = surname;
-        this.otherName = otherName;
-        this.patientNumber = patientNumber;
-        this.birthDate = birthDate;
-        this.idNumber = idNumber;
-        this.mobileNumber = mobileNumber;
-        this.email = email;
-        this.altContactPerson = altContactPerson;
-        this.disability = disability;
-        this.county = county;
     }
 
     public String getFirstName() {
@@ -106,13 +92,12 @@ public class Patient {
         this.altContactPerson = altContactPerson;
     }
 
-
-    public void setDisability(String disability) {
-        this.disability = disability;
+    public Boolean getDisability() {
+        return disability;
     }
 
-    public String getDisability() {
-        return disability;
+    public void setDisability(Boolean disability) {
+        this.disability = disability;
     }
 
     public String getCounty() {
@@ -129,5 +114,13 @@ public class Patient {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAtlContactPersonPhone() {
+        return atlContactPersonPhone;
+    }
+
+    public void setAtlContactPersonPhone(String atlContactPersonPhone) {
+        this.atlContactPersonPhone = atlContactPersonPhone;
     }
 }

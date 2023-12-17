@@ -3,8 +3,6 @@ package com.example.appointmentmanager.utils;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.text.format.DateFormat;
-import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
@@ -26,7 +24,7 @@ public class DateUtils {
                     @Override
                     public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
                         // Display the selected date in the EditText
-                        String selectedDate = selectedDay + "-" + (selectedMonth + 1) + "-" + selectedYear;
+                        String selectedDate = selectedYear + "-" + formatDate((selectedMonth + 1)) + "-" + formatDate(selectedDay);
                         dateEditText.setText(selectedDate);
                     }
                 },
@@ -46,21 +44,16 @@ public class DateUtils {
         TimePickerDialog timePickerDialog = new TimePickerDialog(
                 context,
                 (view, selectedHour, selectedMinute) -> {
-                    // Display the selected time
-                    String amPm;
-                    if (selectedHour >= 12) {
-                        amPm = "PM";
-                        selectedHour = selectedHour - 12;
-                    } else {
-                        amPm = "AM";
-                    }
-
-                    String selectedTime = selectedHour + ":" + String.format("%02d", selectedMinute) + " " + amPm;
+                    String selectedTime = formatDate(selectedHour) + ":" + formatDate(selectedMinute);
                     timeEditText.setText(selectedTime);
                 },
-                hour, minute, DateFormat.is24HourFormat(context));
+                hour, minute, true); // The last parameter (true) enables 24-hour format
 
         // Show the time picker dialog
         timePickerDialog.show();
+    }
+
+    private static  String formatDate(int value){
+        return String.format("%02d", value);
     }
 }

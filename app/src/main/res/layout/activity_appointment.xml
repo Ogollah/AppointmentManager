@@ -11,6 +11,16 @@
         android:background="@color/design_default_color_primary_variant"
         android:padding="16dp">
 
+        <ImageView
+            android:id="@+id/backArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_back"
+            android:contentDescription="@string/back"
+            android:layout_gravity="start"
+            android:layout_marginEnd="16dp"
+            android:onClick="onBackPressed"/>
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -28,7 +38,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/navigationBar"
             android:layout_margin="@dimen/reg_margin"
-            android:hint="Appointment Date"/>
+            android:hint="@string/app_date"/>
+
 
         <EditText
             android:id="@+id/etAppointmentTime"
@@ -36,7 +47,23 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/etAppointmentDate"
             android:layout_margin="@dimen/reg_margin"
-            android:hint="Appointment Time"/>
+            android:hint="@string/app_time"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="16sp" />
 
 
         <Button

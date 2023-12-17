@@ -10,8 +10,8 @@ import retrofit2.http.Path;
 
 public interface ApiEndpoints {
 
-    @POST("patient")
+    @POST("/api/v1/patient")
     Call<Patient> postPatient(@Body Patient patient);
-    @POST("appointment/{id}")
+    @POST("/api/v1/appointments/{id}/schedule")
     Call<Void> saveAppointments(@Body Appointment appointment, @Path("id") Long id);
 }

@@ -2,29 +2,26 @@ package com.example.appointmentmanager.activity;
 
 import static com.example.appointmentmanager.utils.DateUtils.showDatePickerDialog;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.appointmentmanager.R;
-import com.example.appointmentmanager.data.ApiClient;
-import com.example.appointmentmanager.data.ApiEndpoints;
 import com.example.appointmentmanager.model.Patient;
-import com.example.appointmentmanager.repository.PatientRepository;
 import com.example.appointmentmanager.utils.Result;
 
-import java.util.Calendar;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -32,11 +29,10 @@ public class RegistrationActivity extends AppCompatActivity {
             etMobile, etEmail, etAltContactPerson,etAlContactPersonPhone;
     private RadioGroup rbDisability;
     private RadioButton rbYes, rbNo;
-
+    private TextView tvError;
     private ProgressBar progressBar;
-    private PatientRepository patientRepository;
 
-    private AppViewModel appointmentViewModel;
+    private AppViewModel appViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +49,7 @@ public class RegistrationActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etAltContactPerson = findViewById(R.id.etAltPerson);
         etAlContactPersonPhone = findViewById(R.id.etAltPersonPhone);
+        tvError = findViewById(R.id.tvError);
 
         rbDisability = findViewById(R.id.rbDisability);
         rbYes = findViewById(R.id.rbYes);
@@ -60,7 +57,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressBar);
 
-        appointmentViewModel = new ViewModelProvider(this).get(AppViewModel.class);
+        appViewModel = new ViewModelProvider(this).get(AppViewModel.class);
 
         etBirthDate.setOnClickListener(view -> showDatePickerDialog(RegistrationActivity.this, etBirthDate));
 
@@ -74,11 +71,36 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
-        ApiEndpoints apiEndpoints = ApiClient.getClient().create(ApiEndpoints.class);
-        patientRepository = new PatientRepository(apiEndpoints);
-
         Button btnSave = findViewById(R.id.btnSave);
         btnSave.setOnClickListener(view -> savePatient(isDisability.get()));
+
+        // Observe the result
+        appViewModel.getPatientResultLiveDate().observe(this, result -> {
+            progressBar.setVisibility(View.GONE);
+            if (result instanceof Result.Success) {
+                // Patient registration success
+                Patient patient = ((Result.Success<Patient>) result).getData();
+                Toast.makeText(this, "Patient registered successfully", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(this, AppointmentActivity.class);
+                intent.putExtra("patient_id", String.valueOf(patient.getId()));
+                startActivity(intent);
+            } else if (result instanceof Result.Error) {
+                // Patient registration failure
+                Result.Error<Patient> errorResult = (Result.Error<Patient>) result;
+                Log.e("--> RegistrationActivity", "Patient registration: " + errorResult.getError().getMessage());
+                Toast.makeText(this, "Patient registration failed", Toast.LENGTH_SHORT).show();
+
+                if (errorResult.getError().getCause() instanceof IOException) {
+                    // Network error
+                    tvError.setText(getString(R.string.network_error));
+                } else {
+                    // Other errors
+                    tvError.setText(getString(R.string.reg_failed));
+                }
+                tvError.setVisibility(View.VISIBLE);
+            }
+        });
     }
     private void savePatient(boolean isDisability) {
         String nationId = etNationId.getText().toString();
@@ -99,30 +121,37 @@ public class RegistrationActivity extends AppCompatActivity {
             // Show loading indicator
             progressBar.setVisibility(View.VISIBLE);
 
-            appointmentViewModel.savePatients(firstName, surname, surname,patientNumber,
-                    birthDate,nationId,mobile,email,
-                    altContactPerson,atlContactPersonPhone,isDisability,county);
+            try {
+                appViewModel.savePatients(firstName, surname, surname,patientNumber,
+                        birthDate,nationId,mobile,email,
+                        altContactPerson,atlContactPersonPhone,isDisability,county);
+                Log.i("---> RegistrationActivity", "Registering New Patient");
 
-            // Observe the result
-            patientRepository.getPatientResultLiveData().observe(this, result -> {
-                progressBar.setVisibility(View.GONE);
-                if (result instanceof Result.SuccessWithId) {
-                    // Patient registration success
-                    Result.SuccessWithId<Patient> successResult = (Result.SuccessWithId<Patient>) result;
-                    long createdPatientId = successResult.getId();
-                    Toast.makeText(this, "Patient registered successfully", Toast.LENGTH_SHORT).show();
+                clearFields();
+            } catch (Exception e) {
+                    tvError.setText(getString(R.string.connect_exception_error));
 
-                    Intent intent = new Intent(this, AppointmentActivity.class);
-                    intent.putExtra("patient_id", createdPatientId);
-                    startActivity(intent);
-                } else if (result instanceof Result.Error) {
-                    // Patient registration failure
-                    Toast.makeText(this, "Patient registration failed", Toast.LENGTH_SHORT).show();
-                }
-            });
-
+                tvError.setVisibility(View.VISIBLE);
+                e.printStackTrace();
+            }
         } else {
-            Toast.makeText(this, "Please fill All fields marked *", Toast.LENGTH_SHORT).show();
+            tvError.setVisibility(View.VISIBLE);
+            tvError.setText(getString(R.string.required_fields_error));
         }
+    }
+
+    private void clearFields(){
+        etNationId.getText().clear();
+        etFirstName.getText().clear();
+        etBirthDate.getText().clear();
+        etSurname.getText().clear();
+        etCounty.getText().clear();
+        etPatientNo.getText().clear();
+        etMobile.getText().clear();
+        etEmail.getText().clear();
+        etAltContactPerson.getText().clear();
+        etAlContactPersonPhone.getText().clear();
+
+        tvError.setVisibility(View.GONE);
     }
 }

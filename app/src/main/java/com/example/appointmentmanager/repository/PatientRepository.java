@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.appointmentmanager.data.ApiEndpoints;
-import com.example.appointmentmanager.model.Appointment;
 import com.example.appointmentmanager.model.Patient;
 import com.example.appointmentmanager.utils.Result;
 
@@ -37,11 +36,21 @@ public class PatientRepository {
                 @Override
                 public void onResponse(Call<Patient> call, Response<Patient> response) {
                     if (response.isSuccessful()) {
-                        // Notify observers of successful patient registration
-                        patientResultLiveData.setValue(new Result.Success<>(response.body()));
+                        if (response.body() != null) {
+                            Patient patientReg = response.body();
+                            // Notify observers of successful patient registration
+                            patientResultLiveData.setValue(new Result.Success<>(patientReg));
+                        }
+                        else {
+                            patientResultLiveData.setValue(new Result.Error<>(new Exception("Registration - Null response body")));
+                        }
                     } else {
-                        // Notify observers of patient registration failure
-                        patientResultLiveData.setValue(new Result.Error<>(new Exception("Patient registration failed")));
+                        if (response.code() == 500) {
+                            patientResultLiveData.setValue(new Result.Error<>(new Exception("Patient registration failed Server Error")));
+                        } else {
+                            patientResultLiveData.setValue(new Result.Error<>(new Exception("Patient registration failed")));
+                        }
+
                     }
                 }
 

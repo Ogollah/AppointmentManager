@@ -4,25 +4,12 @@ public abstract class Result<T>  {
     public static class Success<T> extends Result<T>{
         private T data;
 
-        public Success(T data) {
-            this.data = data;
+        public Success(T date) {
+            this.data = date;
         }
 
         public T getData() {
             return data;
-        }
-    }
-
-    public static class SuccessWithId<T> extends Success<T> {
-        private long id;
-
-        public SuccessWithId(T data, long id) {
-            super(data);
-            this.id = id;
-        }
-
-        public long getId() {
-            return id;
         }
     }
 

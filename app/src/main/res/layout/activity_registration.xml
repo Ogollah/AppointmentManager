@@ -45,7 +45,7 @@
         android:id="@+id/etPatientNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Patient Number *"
+        android:hint="@string/pat_num"
         android:textStyle="bold"
         android:layout_below="@+id/navigationBar"
         android:layout_margin="@dimen/reg_margin"/>
@@ -54,7 +54,7 @@
         android:id="@+id/etNationalId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="National ID Number"
+        android:hint="@string/nat_id"
         android:textStyle="bold"
         android:layout_below="@+id/etPatientNumber"
         android:layout_margin="@dimen/reg_margin"/>
@@ -63,7 +63,7 @@
         android:id="@+id/etSurName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Surname*"
+        android:hint="@string/surname"
         android:layout_below="@+id/etNationalId"
         android:layout_margin="@dimen/reg_margin"
         android:textStyle="bold"/>
@@ -71,7 +71,7 @@
         android:id="@+id/etFirstName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="First Name*"
+        android:hint="@string/first_name"
         android:layout_below="@+id/etSurName"
         android:layout_margin="@dimen/reg_margin"
         android:textStyle="bold"/>
@@ -80,7 +80,7 @@
         android:id="@+id/etOtherName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Other Name*"
+        android:hint="@string/other_name"
         android:layout_below="@+id/etFirstName"
         android:layout_margin="@dimen/reg_margin"
         android:textStyle="bold"/>
@@ -96,27 +96,27 @@
             android:id="@+id/tvSex"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Sex*"
+            android:hint="@string/sex"
             android:textStyle="bold"/>
 
         <RadioButton
             android:id="@+id/rbMale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Male"/>
+            android:text="@string/male"/>
 
         <RadioButton
             android:id="@+id/rbFemale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Female"/>
+            android:text="@string/female"/>
     </RadioGroup>
 
     <EditText
         android:id="@+id/etBirthDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Birth Date *"
+        android:hint="@string/dob"
         android:textStyle="bold"
         android:layout_below="@+id/rbSex"
         android:layout_margin="@dimen/reg_margin"
@@ -127,7 +127,7 @@
         android:id="@+id/etCounty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Home County*"
+        android:hint="@string/county"
         android:layout_below="@+id/etBirthDate"
         android:layout_margin="@dimen/reg_margin"
         android:textStyle="bold"/>
@@ -136,7 +136,7 @@
         android:id="@+id/etMobile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Mobile Number*"
+        android:hint="@string/mobile"
         android:inputType="number"
         android:layout_below="@+id/etCounty"
         android:layout_margin="@dimen/reg_margin"
@@ -145,7 +145,7 @@
         android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:hint="@string/email"
         android:inputType="textEmailAddress"
         android:layout_below="@+id/etMobile"
         android:layout_margin="@dimen/reg_margin"
@@ -155,7 +155,7 @@
         android:id="@+id/etAltPerson"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name of alternative Contact person"
+        android:hint="@string/alt_cont_person_name"
         android:layout_below="@+id/etEmail"
         android:layout_margin="@dimen/reg_margin"
         android:textStyle="bold"/>
@@ -163,7 +163,7 @@
         android:id="@+id/etAltPersonPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Alternative Contact person Phone"
+        android:hint="@string/alt_cont_person_phone"
         android:inputType="number"
         android:layout_below="@+id/etAltPerson"
         android:layout_margin="@dimen/reg_margin"
@@ -179,7 +179,7 @@
             android:id="@+id/tvDisability"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Has disability?*"
+            android:hint="@string/disability"
             android:textStyle="bold"/>
 
         <RadioButton
@@ -194,6 +194,14 @@
             android:layout_height="wrap_content"
             android:text="No"/>
     </RadioGroup>
+    <TextView
+        android:id="@+id/tvError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="16sp" />
     <Button
         android:id="@+id/btnSave"
         android:layout_width="match_parent"
@@ -201,6 +209,8 @@
         android:layout_below="@id/rbDisability"
         android:layout_marginTop="16dp"
         android:text="Save" />
+        </LinearLayout>
+    </ScrollView>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -208,7 +218,6 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="gone" />
-        </LinearLayout>
-    </ScrollView>
+
 
 </RelativeLayout>

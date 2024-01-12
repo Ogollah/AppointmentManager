@@ -24,9 +24,12 @@ import com.example.appointmentmanager.utils.Result;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Activity for patient registration.
+ */
 public class RegistrationActivity extends AppCompatActivity {
     private EditText etNationId, etSurname, etFirstName, etCounty, etBirthDate, etPatientNo,
-            etMobile, etEmail, etAltContactPerson,etAlContactPersonPhone;
+            etMobile, etEmail, etAltContactPerson, etAlContactPersonPhone;
     private RadioGroup rbDisability;
     private RadioButton rbYes, rbNo;
     private TextView tvError;
@@ -39,6 +42,7 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
+        // Initialize UI components
         etNationId = findViewById(R.id.etNationalId);
         etFirstName = findViewById(R.id.etFirstName);
         etBirthDate = findViewById(R.id.etBirthDate);
@@ -59,22 +63,26 @@ public class RegistrationActivity extends AppCompatActivity {
 
         appViewModel = new ViewModelProvider(this).get(AppViewModel.class);
 
+        // Set date picker dialog on click listener
         etBirthDate.setOnClickListener(view -> showDatePickerDialog(RegistrationActivity.this, etBirthDate));
 
+        // Initialize AtomicBoolean for disability status
         AtomicBoolean isDisability = new AtomicBoolean(false);
-        rbDisability.setOnCheckedChangeListener((group, checked)->{
-            if (checked == rbYes.getId())
-            {
+
+        // Set onCheckedChangeListener for the disability radio group
+        rbDisability.setOnCheckedChangeListener((group, checked) -> {
+            if (checked == rbYes.getId()) {
                 isDisability.set(true);
             } else if (checked == rbNo.getId()) {
                 isDisability.set(false);
             }
         });
 
+        // Set click listener for the save button
         Button btnSave = findViewById(R.id.btnSave);
         btnSave.setOnClickListener(view -> savePatient(isDisability.get()));
 
-        // Observe the result
+        // Observe the result of patient registration
         appViewModel.getPatientResultLiveDate().observe(this, result -> {
             progressBar.setVisibility(View.GONE);
             if (result instanceof Result.Success) {
@@ -82,6 +90,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 Patient patient = ((Result.Success<Patient>) result).getData();
                 Toast.makeText(this, "Patient registered successfully", Toast.LENGTH_SHORT).show();
 
+                // Navigate to the AppointmentActivity with patient ID
                 Intent intent = new Intent(this, AppointmentActivity.class);
                 intent.putExtra("patient_id", String.valueOf(patient.getId()));
                 startActivity(intent);
@@ -91,6 +100,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 Log.e("--> RegistrationActivity", "Patient registration: " + errorResult.getError().getMessage());
                 Toast.makeText(this, "Patient registration failed", Toast.LENGTH_SHORT).show();
 
+                // Handle different error scenarios
                 if (errorResult.getError().getCause() instanceof IOException) {
                     // Network error
                     tvError.setText(getString(R.string.network_error));
@@ -102,19 +112,26 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Save patient details with the provided information.
+     *
+     * @param isDisability The disability status of the patient.
+     */
     private void savePatient(boolean isDisability) {
+        // Get patient details from UI components
         String nationId = etNationId.getText().toString();
         String firstName = etFirstName.getText().toString();
         String birthDate = etBirthDate.getText().toString();
         String surname = etSurname.getText().toString();
         String county = etCounty.getText().toString();
         String patientNumber = etPatientNo.getText().toString();
-        String  mobile = etMobile.getText().toString();
+        String mobile = etMobile.getText().toString();
         String email = etEmail.getText().toString();
         String altContactPerson = etAltContactPerson.getText().toString();
         String atlContactPersonPhone = etAlContactPersonPhone.getText().toString();
 
-
+        // Check if required fields are filled
         if (!surname.isEmpty() && !firstName.isEmpty() && !birthDate.isEmpty() && !county.isEmpty()
                 && !mobile.isEmpty() && !patientNumber.isEmpty()) {
 
@@ -122,25 +139,31 @@ public class RegistrationActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
 
             try {
-                appViewModel.savePatients(firstName, surname, surname,patientNumber,
-                        birthDate,nationId,mobile,email,
-                        altContactPerson,atlContactPersonPhone,isDisability,county);
+                // Trigger ViewModel to save patient details
+                appViewModel.savePatients(firstName, surname, surname, patientNumber,
+                        birthDate, nationId, mobile, email,
+                        altContactPerson, atlContactPersonPhone, isDisability, county);
                 Log.i("---> RegistrationActivity", "Registering New Patient");
 
+                // Clear input fields
                 clearFields();
             } catch (Exception e) {
-                    tvError.setText(getString(R.string.connect_exception_error));
+                tvError.setText(getString(R.string.connect_exception_error));
 
                 tvError.setVisibility(View.VISIBLE);
                 e.printStackTrace();
             }
         } else {
+            // Show error if required fields are missing
             tvError.setVisibility(View.VISIBLE);
             tvError.setText(getString(R.string.required_fields_error));
         }
     }
 
-    private void clearFields(){
+    /**
+     * Clear input fields and hide error message.
+     */
+    private void clearFields() {
         etNationId.getText().clear();
         etFirstName.getText().clear();
         etBirthDate.getText().clear();

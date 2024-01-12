@@ -8,8 +8,17 @@ import android.widget.EditText;
 
 import java.util.Calendar;
 
+/**
+ * Utility class for handling date and time picker dialogs.
+ */
 public class DateUtils {
 
+    /**
+     * Displays a date picker dialog and sets the selected date in the provided EditText.
+     *
+     * @param context      The context in which the date picker dialog is displayed.
+     * @param dateEditText The EditText where the selected date is displayed.
+     */
     public static void showDatePickerDialog(Context context, EditText dateEditText) {
         // Get the current date
         Calendar calendar = Calendar.getInstance();
@@ -19,14 +28,11 @@ public class DateUtils {
 
         // Create a date picker dialog and set the listener for date selection
         DatePickerDialog datePickerDialog = new DatePickerDialog(
-                (Context) context,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
-                        // Display the selected date in the EditText
-                        String selectedDate = selectedYear + "-" + formatDate((selectedMonth + 1)) + "-" + formatDate(selectedDay);
-                        dateEditText.setText(selectedDate);
-                    }
+                context,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    // Display the selected date in the EditText
+                    String selectedDate = selectedYear + "-" + formatDate((selectedMonth + 1)) + "-" + formatDate(selectedDay);
+                    dateEditText.setText(selectedDate);
                 },
                 year, month, dayOfMonth);
 
@@ -34,6 +40,12 @@ public class DateUtils {
         datePickerDialog.show();
     }
 
+    /**
+     * Displays a time picker dialog and sets the selected time in the provided EditText.
+     *
+     * @param context      The context in which the time picker dialog is displayed.
+     * @param timeEditText The EditText where the selected time is displayed.
+     */
     public static void showTimePickerDialog(Context context, EditText timeEditText) {
         // Get the current time
         Calendar calendar = Calendar.getInstance();
@@ -53,7 +65,13 @@ public class DateUtils {
         timePickerDialog.show();
     }
 
-    private static  String formatDate(int value){
+    /**
+     * Formats the given value to ensure it has two digits.
+     *
+     * @param value The value to be formatted.
+     * @return A formatted string with two digits.
+     */
+    private static String formatDate(int value) {
         return String.format("%02d", value);
     }
 }
